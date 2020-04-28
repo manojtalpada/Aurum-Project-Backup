@@ -1,0 +1,165 @@
+<app-header></app-header>
+
+
+<section class="section section-content py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="heading">
+                    <h3>User Details</h3>
+                    <a (click)="userModal.show();" class="btn btn-primary float-right">+ Create New Account</a>
+
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" [mfData]="userlist | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="5">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>BirthDate</th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of mf.data; let i = index">
+                                    <!-- {{item | json}} -->
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.user_name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.birthdate | date: "dd/MM/yyyy"}}</td>
+
+                                    <td align="center">
+                                        <div class="action-buttons">
+                                            <a href="#" data-toggle="modal" (click)="openRegisterModel(item);updateUserdata(); editModal.show()" class="btn btn-success"><span class="mdi mdi-lead-pencil"></span></a>
+                                            <a href="#" data-toggle="modal" (click)="openRegisterModel(item);deleteuser();" class="btn btn-danger"><span class="mdi mdi-close"></span></a>
+                                        </div>
+                                    </td>
+                                    <!-- <td>
+                                        <button type="button" (click)="editModal.show()" data-toggle="modal" data-target="#editModal" data-backdrop="static" data-keyboard="false" class="btn btn-info">
+                                            <i class="fa fa-edit"></i>
+                                          </button>
+                                    </td> -->
+                                    <td>
+                                        <a [routerLink]="[item.user_name+'/contact']">Go to details</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,15]">
+                                        </mfBootstrapPaginator>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header appoint-head-color">
+                <h4 class="modal-title appoint-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update User Details</h4>
+                <button type="button" class="close" (click)="editModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+
+                                <input class="form-control" type="text" [(ngModel)]="model.first_name" name="first_name" #first_name="ngModel" placeholder="First Name" />
+                                <label for="name"></label>
+                                <input class="form-control" type="text" [(ngModel)]="model.last_name" name="last_name" #last_name="ngModel" placeholder="Last Name" />
+                                <label for="name"></label>
+                                <input class="form-control" type="text" [(ngModel)]="model.user_name" name="user_name" #user_name="ngModel" placeholder="username" />
+                                <label for="name"></label>
+                                <label for="name"></label>
+                                <input type="date" class="form-control" placeholder="birthday" name="birthdate" [(ngModel)]="model.birthdate" #birthdate="ngModel">
+
+                                <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="model.email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" #email="ngModel" required>
+
+                                <label for="name"></label>
+                                <input type="text" class="form-control" placeholder="Slug ID" name="url_slug" [(ngModel)]="model.url_slug" id="url_slug" #url_slug="ngModel" minlength="8">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)=" editModal.hide()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="updateUser(); editModal.hide()">Save
+            Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- New Account Modal -->
+<div bsModal #userModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header appoint-head-color">
+                <h4 class="modal-title appoint-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Create User Account</h4>
+                <button type="button" class="close" (click)="userModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+
+                                <input class="form-control" type="text" [(ngModel)]="model.first_name" name="first_name" #first_name="ngModel" placeholder="First Name" />
+                                <label for="name"></label>
+                                <input class="form-control" type="text" [(ngModel)]="model.last_name" name="last_name" #last_name="ngModel" placeholder="Last Name" />
+                                <label for="name"></label>
+                                <input class="form-control" type="text" [(ngModel)]="model.user_name" name="user_name" #user_name="ngModel" placeholder="username" />
+                                <label for="name"></label>
+                                <label for="name"></label>
+                                <input type="date" class="form-control" placeholder="birthday" name="birthdate" [(ngModel)]="model.birthdate" #birthdate="ngModel">
+
+                                <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="model.email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" #email="ngModel" required>
+
+                                <label for="name"></label>
+                                <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="model.password" id="password" #password="ngModel" minlength="8">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)=" userModal.hide()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="addAccount(); userModal.hide()">Save
+             </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- New Account Modal -->
